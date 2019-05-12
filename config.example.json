@@ -1,0 +1,26 @@
+{
+  "log_file": "stderr",
+  "log_level": "debug",
+  "pid_file": "/tmp/mgw.pid",
+  "allowed_hosts": [
+    "mgw.test",
+    "mgw.local.affiliator.biz"
+  ],
+  "backend_config": {
+    "save_workers_size": 1,
+    "save_process": "HeadersParser|Header|Mailgun|Debugger",
+    "primary_mail_host": "mgw.local.affiliator.biz",
+    "log_received_mails": true
+  },
+  "servers": [
+    {
+      "is_enabled": true,
+      "host_name": "mgw.local.affiliator.biz",
+      "max_size": 1000000,
+      "timeout": 180,
+      "listen_interface": "127.0.0.1:25",
+      "max_clients": 1000,
+      "log_file": "stderr"
+    }
+  ]
+}
