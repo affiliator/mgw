@@ -1,3 +1,5 @@
+![MGW Logo](https://github.com/affiliator/mgw/raw/master/.github/icon-above-font.png "MGW Logo")
+
 # mgw by Affiliator
 This project is in development.
 
