@@ -2,14 +2,12 @@ package mailgun_processor
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/flashmob/go-guerrilla/backends"
 	"github.com/flashmob/go-guerrilla/mail"
 	"github.com/mailgun/mailgun-go"
-	"io/ioutil"
 	"log"
-	"os"
+	"mailgun-mgw/config"
 	"time"
 )
 
@@ -20,27 +18,20 @@ type ApiCredentials struct {
 	ApiKey string `json:"mailgun_api_key"`
 }
 
-func InitCredentials(credentialsPath string) error {
-	file, err := os.Open(credentialsPath)
-	if err != nil {
-		return err
-	}
-
-	data, err := ioutil.ReadAll(file)
-	if err != nil {
-		return err
-	}
-
-	err = json.Unmarshal(data, &apiCredentials)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // The MyFoo decorator [enter what it does]
 var MailgunProcessor = func() backends.Decorator {
+
+	initializer := backends.InitializeWith(func(c backends.BackendConfig) error {
+		r := config.GetInstance().Paths.Credentials.ReadTo(&apiCredentials)
+		if r != nil {
+			return r
+		}
+
+		return nil
+	})
+
+	backends.Svc.AddInitializer(initializer)
+
 	return func(p backends.Processor) backends.Processor {
 		return backends.ProcessWith(
 			func(e *mail.Envelope, task backends.SelectTask) (backends.Result, error) {
@@ -60,7 +51,7 @@ var MailgunProcessor = func() backends.Decorator {
 
 					fmt.Println("Sending using mailgun..")
 					mg := mailgun.NewMailgun(apiCredentials.Domain, apiCredentials.ApiKey)
-					mg.SetAPIBase("https://api.eu.mailgun.net/v3")
+					mg.SetAPIBase("")
 
 					// The message object allows you to add attachments and Bcc recipients
 					message := mg.NewMessage(e.MailFrom.String(), e.Subject, "Das ist ein Test!", e.RcptTo[0].String())

@@ -12,13 +12,20 @@
     "primary_mail_host": "mgw.local.affiliator.biz",
     "log_received_mails": true
   },
+  "provider": {
+    "mailgun": {
+      "domain": "",
+      "apiKey": "",
+      "apiBase": "https://api.eu.mailgun.net/v3"
+    }
+  },
   "servers": [
     {
       "is_enabled": true,
       "host_name": "mgw.local.affiliator.biz",
       "max_size": 1000000,
       "timeout": 180,
-      "listen_interface": "127.0.0.1:25",
+      "listen_interface": "127.0.0.1:2525",
       "max_clients": 1000,
       "log_file": "stderr"
     }
