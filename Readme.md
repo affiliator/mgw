@@ -1,4 +1,4 @@
-![MGW Logo](https://github.com/affiliator/mgw/raw/master/.github/bannner.png "MGW Logo")
+![MGW Logo](https://github.com/affiliator/mgw/raw/master/.github/banner.png "MGW Logo")
 
 # mgw by Affiliator
 This project is in development.
