@@ -43,3 +43,4 @@ $ ./mgw serve --config="config.json"
  - [ ] Make it possible to add add e-mail properties through header
  - [x] general refactoring, this is my first go project. 
  - [ ] Add Jan as Contributor
+ - [ ] Add proper logging adapter

@@ -41,7 +41,7 @@ func (f File) Exists() (bool, error) {
 		return false, nil
 	}
 
-	return err != nil, err
+	return true, nil
 }
 
 func (f File) ToString() string {
