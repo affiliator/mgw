@@ -9,6 +9,6 @@ func TestInitialize(t *testing.T) {
 	result := config.Initialize()
 
 	if result == nil {
-		t.Error("Confid not initialized.")
+		t.Error("Config not initialized.")
 	}
 }
