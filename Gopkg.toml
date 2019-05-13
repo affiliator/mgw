@@ -1,4 +1,9 @@
 
+ignored = [
+    "github.com/mailgun/mailgun-go",
+    "github.com/mailgun/mailgun-go/*"
+]
+
 [[constraint]]
   branch = "master"
   name = "github.com/flashmob/go-guerrilla"
