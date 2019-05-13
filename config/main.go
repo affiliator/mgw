@@ -13,6 +13,7 @@ var initialized = false
 type Configuration struct {
 	Paths    Paths
 	Defaults DefaultValues
+	Providers Providers `json:"provider,omitempty"`
 }
 
 type Paths struct {
@@ -95,7 +96,7 @@ func Initialize() *Configuration {
 	return &config
 }
 
-func GetInstance() *Configuration {
+func Ptr() *Configuration {
 	if initialized == false {
 		Initialize().FillWithDefaults()
 	}
@@ -109,6 +110,10 @@ func (c *Configuration) Read() ([]byte, error) {
 
 func (c *Configuration) ReadTo(v interface{}) error {
 	return c.Paths.Config.ReadTo(v)
+}
+
+func (c *Configuration) Reload() error {
+	return c.Paths.Config.ReadTo(c)
 }
 
 func (c *Configuration) FillWithDefaults() *Configuration {

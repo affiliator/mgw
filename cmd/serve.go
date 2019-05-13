@@ -27,7 +27,7 @@ var (
 func init() {
 	rootCmd.AddCommand(serveCmd)
 
-	cfg = config.GetInstance()
+	cfg = config.Ptr()
 
 	serveCmd.PersistentFlags().StringVarP(&cfg.Paths.Config.Name, "config", "c",
 		"", "Path to the configuration file")
@@ -43,7 +43,7 @@ func serve(cmd *cobra.Command, args []string) {
 	d = guerrilla.Daemon{}
 	d.AddProcessor("Mailgun", mailgun_processor.MailgunProcessor)
 
-	err := readConfig(cfg.Paths)
+	err := readConfig(config.Ptr())
 	if err != nil {
 		panic(err)
 	}
@@ -70,13 +70,17 @@ func (c *DaemonConfig) emitChangeEvents(oldConfig *DaemonConfig, app guerrilla.G
 }
 
 // ReadConfig which should be called at startup
-func readConfig(paths config.Paths) error {
-	if _, err := d.LoadConfig(paths.Config.GetPath()); err != nil {
+func readConfig(c *config.Configuration) error {
+	if err := c.Reload(); err != nil {
+		return err
+	}
+
+	if _, err := d.LoadConfig(c.Paths.Config.GetPath()); err != nil {
 		return err
 	}
 
 	if d.Config.PidFile == "" {
-		d.Config.PidFile = paths.Pid.GetPath()
+		d.Config.PidFile = c.Paths.Pid.GetPath()
 	}
 
 	if len(d.Config.AllowedHosts) == 0 {
@@ -99,7 +103,7 @@ func sigHandler() {
 	// Keep the daemon busy by waiting for signals to come
 	for sig := range signalChannel {
 		if sig == syscall.SIGHUP {
-			_ = d.ReloadConfigFile(config.GetInstance().Paths.Config.GetPath())
+			_ = d.ReloadConfigFile(config.Ptr().Paths.Config.GetPath())
 		} else if sig == syscall.SIGUSR1 {
 			_ = d.ReopenLogs()
 		} else if sig == syscall.SIGTERM || sig == syscall.SIGQUIT || sig == syscall.SIGINT {

@@ -11,20 +11,40 @@ import (
 	"time"
 )
 
-var apiCredentials ApiCredentials
+var (
+	conf = config.Ptr()
+	overrides Overrides
+)
 
-type ApiCredentials struct {
-	Domain string `json:"mailgun_domain"`
-	ApiKey string `json:"mailgun_api_key"`
+type Overrides struct {
+	Credentials config.Credentials `json:"mailgun,omitempty"`
 }
 
-// The MyFoo decorator [enter what it does]
-var MailgunProcessor = func() backends.Decorator {
+func createProviderClient() *mailgun.MailgunImpl {
+	c := config.Ptr().Providers.Mailgun
+	mg := mailgun.NewMailgun(c.Credentials.Domain, c.Credentials.ApiKey)
 
+	if c.ApiBase != "" {
+		mg.SetAPIBase(c.ApiBase)
+	}
+
+	return mg
+}
+
+var MailgunProcessor = func() backends.Decorator {
 	initializer := backends.InitializeWith(func(c backends.BackendConfig) error {
-		r := config.GetInstance().Paths.Credentials.ReadTo(&apiCredentials)
-		if r != nil {
-			return r
+		e := conf.Paths.Credentials.ReadTo(&overrides)
+		if e != nil {
+			return e
+		}
+
+		cred := &conf.Providers.Mailgun.Credentials
+		if overrides.Credentials.ApiKey != "" {
+			cred.ApiKey = overrides.Credentials.ApiKey
+		}
+
+		if overrides.Credentials.Domain != "" {
+			cred.Domain = overrides.Credentials.Domain
 		}
 
 		return nil
@@ -50,8 +70,7 @@ var MailgunProcessor = func() backends.Decorator {
 				} else if task == backends.TaskSaveMail {
 
 					fmt.Println("Sending using mailgun..")
-					mg := mailgun.NewMailgun(apiCredentials.Domain, apiCredentials.ApiKey)
-					mg.SetAPIBase("")
+					mg := createProviderClient()
 
 					// The message object allows you to add attachments and Bcc recipients
 					message := mg.NewMessage(e.MailFrom.String(), e.Subject, "Das ist ein Test!", e.RcptTo[0].String())
