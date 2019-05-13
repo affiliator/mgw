@@ -9,6 +9,11 @@ Also for productive deployments you may want to use Nginx as reverse proxy to fo
 ## Usage
 After making sure your target system met all requirements, you can proceed with building & deploying the software.
 
+Install dependencies
+```
+$ make vendor
+```
+
 You can build from source using make:
 ```
 $ make build

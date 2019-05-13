@@ -1,4 +1,4 @@
-.PHONY := help build prepare run clean vendor
+.PHONY := help build prepare run clean vendor test
 .DEFAULT_GOAL := help
 
 GO_BIN = go
@@ -39,7 +39,7 @@ __check_defined = \
 
 ## Compile source to binary
 build:
-	$(GO_BIN) build -o mgw
+	${GO_BIN} build -o mgw
 
 ## Create necessary config files
 prepare:
@@ -57,3 +57,7 @@ clean:
 vendor:
 	${GO_BIN} get github.com/mailgun/mailgun-go
 	${DEP_BIN} ensure
+
+## Run unit tests
+test:
+	${GO_BIN} test -v ./tests
