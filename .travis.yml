@@ -10,3 +10,5 @@ before_install:
   - make vendor
 install:
   make build
+script:
+  make test
