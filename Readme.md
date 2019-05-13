@@ -42,5 +42,8 @@ $ ./mgw serve --config="config.json"
  - [ ] Add API to read E-Mails State
  - [ ] Make it possible to add add e-mail properties through header
  - [x] general refactoring, this is my first go project. 
- - [ ] Add Jan as Contributor
+ - [x] Add Jan as Contributor
  - [ ] Add proper logging adapter
+ - [ ] Allow configuration overriding via env variables
+ - [ ] Add unit tests
+ - [ ] Build and test in travis

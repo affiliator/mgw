@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -58,6 +59,9 @@ func (f File) Read() ([]byte, error) {
 }
 
 func (f File) ReadTo(v interface{}) error {
+	if result, _ := f.Exists(); result == false {
+		return errors.New("File " + f.GetPath() + " does not exist.")
+	}
 	data, err := f.Read()
 	if err != nil {
 		return err
