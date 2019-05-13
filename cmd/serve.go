@@ -3,10 +3,10 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"github.com/affiliator/mgw/config"
+	mailgun_processor "github.com/affiliator/mgw/processor"
 	"github.com/flashmob/go-guerrilla"
 	"github.com/spf13/cobra"
-	"mailgun-mgw/config"
-	mailgun_processor "mailgun-mgw/processor"
 	"os"
 	"os/signal"
 	"syscall"
@@ -19,8 +19,8 @@ var serveCmd = &cobra.Command{
 }
 
 var (
-	d guerrilla.Daemon
-	cfg *config.Configuration
+	d             guerrilla.Daemon
+	cfg           *config.Configuration
 	signalChannel = make(chan os.Signal, 1)
 )
 

@@ -3,16 +3,16 @@ package mailgun_processor
 import (
 	"context"
 	"fmt"
+	"github.com/affiliator/mgw/config"
 	"github.com/flashmob/go-guerrilla/backends"
 	"github.com/flashmob/go-guerrilla/mail"
 	"github.com/mailgun/mailgun-go"
 	"log"
-	"mailgun-mgw/config"
 	"time"
 )
 
 var (
-	conf = config.Ptr()
+	conf      = config.Ptr()
 	overrides Overrides
 )
 
@@ -33,6 +33,10 @@ func createProviderClient() *mailgun.MailgunImpl {
 
 var MailgunProcessor = func() backends.Decorator {
 	initializer := backends.InitializeWith(func(c backends.BackendConfig) error {
+		if result, _ := conf.Paths.Credentials.Exists(); result == false {
+			return nil
+		}
+
 		e := conf.Paths.Credentials.ReadTo(&overrides)
 		if e != nil {
 			return e

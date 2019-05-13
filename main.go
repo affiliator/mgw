@@ -1,6 +1,6 @@
 package main
 
-import "mailgun-mgw/cmd"
+import "github.com/affiliator/mgw/cmd"
 
 func main() {
 	cmd.Execute()

@@ -1,4 +1,6 @@
 /.idea
+/vendor
 config.json
 credentials.json
 .DS_Store
+mgw

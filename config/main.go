@@ -11,8 +11,8 @@ var config Configuration
 var initialized = false
 
 type Configuration struct {
-	Paths    Paths
-	Defaults DefaultValues
+	Paths     Paths
+	Defaults  DefaultValues
 	Providers Providers `json:"provider,omitempty"`
 }
 
@@ -23,7 +23,7 @@ type Paths struct {
 }
 
 type File struct {
-	Name	 string
+	Name     string
 	Relative bool
 }
 
@@ -33,6 +33,15 @@ func (f File) GetPath() string {
 	}
 
 	return f.Name
+}
+
+func (f File) Exists() (bool, error) {
+	_, err := os.Stat(f.GetPath())
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+
+	return err != nil, err
 }
 
 func (f File) ToString() string {
@@ -75,7 +84,7 @@ type DefaultValues struct{}
 const (
 	defaultPidFile         string = "/var/run/mgw.pid"
 	defaultCredentialsFile string = "credentials.json"
-	defaultConfigFile      string = "config.example.json"
+	defaultConfigFile      string = "config.json"
 )
 
 func (d DefaultValues) getPidFile() File {

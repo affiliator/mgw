@@ -8,7 +8,7 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "mailgun-mgw",
+	Use:   "mgw",
 	Short: "A simple smtp server which redirects every email to Mailgun.",
 	Run:   nil,
 }
