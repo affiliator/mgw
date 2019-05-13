@@ -3,11 +3,13 @@ language: go
 go:
   - 1.11.x
   - 1.12.x
+  - tip
 
 before_install:
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+  - go get github.com/mattn/goveralls
   - make vendor
 install:
   make build
 script:
-  make test
+  $GOPATH/bin/goveralls -service=travis-ci
