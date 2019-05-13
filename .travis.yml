@@ -6,6 +6,7 @@ go:
   - master
 
 before_install:
-  make vendor
+  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+  - make vendor
 install:
   make build
