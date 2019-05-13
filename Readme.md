@@ -2,6 +2,8 @@
 
 **Note**: This project is under heavy development, more information coming soon. 
 
+[![Build Status](https://travis-ci.org/affiliator/mgw.svg?branch=master)](https://travis-ci.org/affiliator/mgw)
+
 ## Requirements
 You need [golang](https://github.com/golang/go) in version 1.11+ and [dep](https://github.com/golang/dep) to handle the dependencies.
 Also for productive deployments you may want to use Nginx as reverse proxy to force authentication. Otherwise you should make sure your service is not bound to a public interface.
