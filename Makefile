@@ -39,7 +39,7 @@ __check_defined = \
 
 ## Compile source to binary
 build:
-	$(GO_BIN) build -o mgw
+	${GO_BIN} build -o mgw
 
 ## Create necessary config files
 prepare:

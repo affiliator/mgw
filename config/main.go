@@ -14,6 +14,7 @@ type Configuration struct {
 	Paths     Paths
 	Defaults  DefaultValues
 	Providers Providers `json:"provider,omitempty"`
+	Storage   Storage   `json:"storage"`
 }
 
 type Paths struct {

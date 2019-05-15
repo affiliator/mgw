@@ -12,6 +12,10 @@ ignored = [
   name = "github.com/spf13/cobra"
   version = "0.0.3"
 
+[[constraint]]
+  name = "github.com/jinzhu/gorm"
+  version = "1.9.8"
+
 [prune]
   go-tests = true
   unused-packages = true
