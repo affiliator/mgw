@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/affiliator/mgw/config"
 	"github.com/spf13/cobra"
 	"os"
 )
@@ -21,5 +22,21 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize()
+	cobra.OnInitialize(func() {
+		err := config.Ptr().Reload()
+		if err != nil {
+			panic(err)
+		}
+	})
+
+	cfg := config.Ptr()
+
+	rootCmd.PersistentFlags().StringVarP(&cfg.Paths.Config.Name, "config", "c",
+		"", "Path to the configuration file")
+
+	rootCmd.PersistentFlags().StringVarP(&cfg.Paths.Pid.Name, "pid", "p",
+		"", "Path to the pid file")
+
+	rootCmd.PersistentFlags().StringVarP(&cfg.Paths.Credentials.Name, "credentials", "a",
+		"", "Path to the file containing mailgun api credentials")
 }

@@ -5,18 +5,19 @@ import (
 	"fmt"
 	"github.com/affiliator/mgw/config"
 	"reflect"
-	"strings"
 	"text/template"
 )
 
 const (
 	SQLiteFormat DSNFormat = "{{ .Path}}"
 	MySQLFormat  DSNFormat = "{{ .Username}}:{{ .Password}}@/{{ .Database}}?charset={{ .Charset}}&parseTime={{ .ParseTime}}"
+
+	SQLite string = "sqlite"
+	MySQL  string = "mysql"
 )
 
 var (
-	availableDialects []string
-	dialects          Dialects
+	dialects Dialects
 )
 
 func init() {
@@ -24,8 +25,8 @@ func init() {
 }
 
 func NewDialectCollection() Dialects {
-	sqlite := Dialect{SQLiteFormat}
-	mysql := Dialect{MySQLFormat}
+	sqlite := Dialect{SQLite, SQLiteFormat}
+	mysql := Dialect{MySQL, MySQLFormat}
 
 	return Dialects{
 		MySQL:  mysql,
@@ -50,16 +51,12 @@ type IDialect interface {
 }
 
 type Dialect struct {
+	Name   string
 	Format DSNFormat
 }
 
-func (d Dialect) Name() string {
-	name := reflect.TypeOf(d).Name()
-	return strings.ToLower(name)
-}
-
 func (d Dialect) Config() (config.Connection, error) {
-	return config.Ptr().Storage.Connections.FindByDialect(d.Name())
+	return config.Ptr().Storage.Connections.ByDialect(d.Name)
 }
 
 func (d Dialect) DSN() string {
@@ -90,46 +87,30 @@ type Dialects struct {
 	SQLite Dialect
 }
 
-func (d Dialects) Valid(dialect string) bool {
-	if availableDialects == nil {
-		availableDialects = d.getAvailable()
+func (d Dialects) Mapping() *map[string]DSNFormat {
+	return &map[string]DSNFormat{
+		SQLite: SQLiteFormat,
+		MySQL:  MySQLFormat,
 	}
+}
 
-	for _, v := range availableDialects {
-		if strings.EqualFold(v, dialect) {
-			return true
-		}
+func (d Dialects) Valid(dialect string) bool {
+	if _, exists := (*d.Mapping())[dialect]; exists {
+		return true
 	}
 
 	return false
 }
 
-func (d Dialects) getAvailable() []string {
-	t := reflect.TypeOf(d)
-	dt := reflect.TypeOf(Dialect{})
-	available := make([]string, t.NumField())
-
-	for i := 0; i < t.NumField(); i++ {
-		f := t.Field(i)
-		if f.Type == dt {
-			name := t.Field(i).Name
-			available[i] = name
-		}
-	}
-
-	return available
-}
-
 func (d Dialects) Configured() (Dialect, error) {
-	var dialect Dialect
-	configured := config.Ptr().Storage.Default
+	storage := config.Ptr().Storage.Default
 
-	switch configured {
+	switch storage {
 	case "mysql":
 		return d.MySQL, nil
 	case "sqlite":
 		return d.SQLite, nil
 	}
 
-	return dialect, fmt.Errorf("configured dialect `%s` is not implemented", configured)
+	return Dialect{}, fmt.Errorf("configured dialect `%s` is not implemented", storage)
 }

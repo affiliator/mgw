@@ -24,7 +24,7 @@ type Storage struct {
 }
 
 func (s Storage) Configured() (Connection, error) {
-	return s.Connections.FindByDialect(s.Default)
+	return s.Connections.ByDialect(s.Default)
 }
 
 type Connections struct {
@@ -32,7 +32,7 @@ type Connections struct {
 	SQLite SQLite `json:"sqlite"`
 }
 
-func (c Connections) FindByDialect(dialect string) (Connection, error) {
+func (c Connections) ByDialect(dialect string) (Connection, error) {
 	switch dialect {
 	case "mysql":
 		return c.MySQL, nil
@@ -43,11 +43,10 @@ func (c Connections) FindByDialect(dialect string) (Connection, error) {
 	return nil, fmt.Errorf("configured dialect `%s` is not implemented", dialect)
 }
 
-type Connection interface {
-	getDSN() string
-}
+type Connection interface{}
 
 type MySQL struct {
+	Connection
 	Hostname  string `json:"hostname"`
 	Username  string `json:"username"`
 	Password  string `json:"password"`
@@ -56,16 +55,7 @@ type MySQL struct {
 	ParseTime bool   `json:"parseTime"`
 }
 
-func (m MySQL) getDSN() string {
-	return fmt.Sprintf(
-		"%s:%s@/%s?charset=%s&parseTime=%t",
-		m.Username, m.Password, m.Database, m.Charset, m.ParseTime)
-}
-
 type SQLite struct {
+	Connection
 	Path string `json:"path"`
-}
-
-func (c SQLite) getDSN() string {
-	return c.Path
 }

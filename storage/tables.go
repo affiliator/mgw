@@ -2,6 +2,13 @@ package storage
 
 import "github.com/jinzhu/gorm"
 
+func Tables() []Entity {
+	return []Entity{
+		Message{},
+	}
+}
+
+type Entity interface{}
 type Message struct {
 	gorm.Model
 	From      string // Store as format: Pascal Krason <p.krason@padr.io>

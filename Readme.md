@@ -31,7 +31,9 @@ $ ./mgw serve --config="config.json"
 
 # Todo
  - [ ] --pid (-p) param will be ignored
- - [ ] When the `--config (-c)` is missing, everything crashes.  
+ - [ ] When the `--config (-c)` is missing, everything crashes.
+ - [ ] Proper default config initialization
+ - [ ] Properly load config from args   
  - [x] More documentation & add readme
  - [x] Add Makefile functionality
  - [ ] Add Mailgun as processor
@@ -44,3 +46,5 @@ $ ./mgw serve --config="config.json"
  - [x] general refactoring, this is my first go project. 
  - [ ] Add Jan as Contributor
  - [ ] Add proper logging adapter
+ - [ ] Make storage.dialect more dynamic instead hardcoding
+ 

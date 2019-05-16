@@ -15,8 +15,10 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/affiliator/mgw/storage"
 	"github.com/spf13/cobra"
+	"reflect"
 )
 
 var dbCmd = &cobra.Command{
@@ -38,5 +40,20 @@ func init() {
 }
 
 func migrate(cmd *cobra.Command, args []string) {
-	storage.Connection().AutoMigrate(&storage.Message{})
+	connection := storage.Connection()
+
+	for _, table := range storage.Tables() {
+		reflect := reflect.TypeOf(table).Name()
+		fmt.Printf("Migrating schema '%s' \n", reflect)
+		scope := connection.AutoMigrate(table)
+		if len(scope.GetErrors()) == 0 {
+			fmt.Println("Successfully migrated without errors")
+			continue
+		}
+
+		// Todo: Log what happened?
+		fmt.Println("Something wen't wrong, check logs.")
+		fmt.Println(scope.Error)
+	}
+
 }

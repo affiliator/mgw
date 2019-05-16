@@ -20,23 +20,11 @@ var serveCmd = &cobra.Command{
 
 var (
 	d             guerrilla.Daemon
-	cfg           *config.Configuration
 	signalChannel = make(chan os.Signal, 1)
 )
 
 func init() {
 	rootCmd.AddCommand(serveCmd)
-
-	cfg = config.Ptr()
-
-	serveCmd.PersistentFlags().StringVarP(&cfg.Paths.Config.Name, "config", "c",
-		"", "Path to the configuration file")
-
-	serveCmd.PersistentFlags().StringVarP(&cfg.Paths.Pid.Name, "pid", "p",
-		"", "Path to the pid file")
-
-	serveCmd.PersistentFlags().StringVarP(&cfg.Paths.Credentials.Name, "credentials", "a",
-		"", "Path to the file containing mailgun api credentials")
 }
 
 func serve(cmd *cobra.Command, args []string) {
