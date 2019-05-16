@@ -38,6 +38,7 @@ $ ./mgw serve --config="config.json"
 ```
 
 # Todo
+ - [ ] consider validating rcpt through mailgun's validation service 
  - [ ] --pid (-p) param will be ignored
  - [ ] When the `--config (-c)` is missing, everything crashes.  
  - [x] More documentation & add readme
