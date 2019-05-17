@@ -4,6 +4,7 @@
 
 [![Build Status](https://travis-ci.org/affiliator/mgw.svg?branch=master)](https://travis-ci.org/affiliator/mgw)
 [![Coverage Status](https://coveralls.io/repos/github/affiliator/mgw/badge.svg?branch=master)](https://coveralls.io/github/affiliator/mgw?branch=master)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/affiliator/mgw.svg?color=%234c1)
 
 ## Requirements
 You need [golang](https://github.com/golang/go) in version 1.11+ and [dep](https://github.com/golang/dep) to handle the dependencies.
